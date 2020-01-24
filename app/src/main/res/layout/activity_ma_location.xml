@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".ma_location">
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="No Location"
+            android:id="@+id/latitude"
+            android:textSize="30dp"
+            android:background="@color/colorPrimary"
+            android:textAlignment="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+        </TextView>
+        <TextView
+            android:background="@color/colorAccent"
+            android:textAlignment="center"
+            android:text="No Location"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:id="@+id/longitude"
+            android:textSize="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+        </TextView>
+        <TextView
+            android:text="No Location"
+            android:textSize="30dp"
+            android:background="@color/colorPrimary"
+            android:textAlignment="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:id="@+id/altitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+        </TextView>
+
+    </LinearLayout>
+    <EditText
+        android:id="@+id/bus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </EditText>
+    <Button
+        android:text="envoyer le numéro"
+        android:layout_width="match_parent"
+        android:id="@+id/numéro"
+        android:layout_height="wrap_content">
+
+    </Button>
+
+</LinearLayout>
