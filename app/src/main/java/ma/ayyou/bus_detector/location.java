@@ -11,7 +11,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 
-class location implements LocationListener {
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
+class location extends AppCompatActivity implements LocationListener {
     ////cette classe récupère la localisation de mon téléphone et envoie les coordonnées
     public Location location;
     ma_location my_location;
@@ -48,6 +51,7 @@ class location implements LocationListener {
         Intent intent=new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         context.startActivity(intent);
     }
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public Location configure(){
        ///methode pour récupérer la localisation initiale et le service localisation
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
@@ -55,7 +59,7 @@ class location implements LocationListener {
             if(context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_DENIED||context.checkSelfPermission(Manifest.permission.ACCESS_NETWORK_STATE)==PackageManager.PERMISSION_DENIED)
             {
                 String[] permission ={Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_NETWORK_STATE};
-                //requestPermissions(permission,PERMISSION_CODE);
+                requestPermissions(permission,3);
             }
             else{
                 /// Toast.makeText(context, "hello1", Toast.LENGTH_SHORT).show();
@@ -77,7 +81,10 @@ class location implements LocationListener {
             return location;
         }
         else{
-            /// Toast.makeText(context, "No location", Toast.LENGTH_SHORT).show();
+            int REQUEST_ENABLE_LOCATION=6;
+            requestPermissions(
+                    new String[] {  Manifest.permission.ACCESS_FINE_LOCATION  },
+                    REQUEST_ENABLE_LOCATION );
         }
         /// Toast.makeText(context, ""+location, LENGTH_SHORT).show();
         return null;

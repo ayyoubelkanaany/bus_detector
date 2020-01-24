@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:layout_marginTop="5dp"
+    android:layout_marginBottom="50dp"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".select_bus"
@@ -136,17 +136,10 @@
 
             <Button
                 android:id="@+id/detecte_bus"
-                android:text="chercher bus"
-                android:layout_margin="10dp"
-                android:layout_width="160dp"
-                android:layout_height="50dp">
-            </Button>
-            <Button
-                android:id="@+id/start_detect"
                 android:text="commencer recherche"
                 android:layout_margin="10dp"
-                android:layout_width="160dp"
-                android:layout_height="50dp">
+                android:layout_width="200dp"
+                android:layout_height="wrap_content">
             </Button>
         </LinearLayout>
 

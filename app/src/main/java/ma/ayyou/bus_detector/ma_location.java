@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,6 +18,7 @@ import java.util.TimerTask;
 public class ma_location extends AppCompatActivity {
   public static TextView  longitude,latitude,altitude;
   public static EditText bus;
+  speaker parleur;
    location loc;////objets location
    senddata data; /// objets senddata poue envoyer les coordonnées
    private Button numéro;
@@ -27,21 +27,18 @@ public class ma_location extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ma_location);
+        parleur=new speaker(this);
+        parleur.initializeTextToSpeech("selectionner le numéro de bus à diffuser");
+        parleur.initializespeechRecognizer();
         loc = new location(this);
         data=new senddata(this);
         this.longitude = findViewById(R.id.longitude);
-        this.numéro=findViewById(R.id.numéro);
         this.bus=findViewById(R.id.bus);
         this.latitude = findViewById(R.id.latitude);
         this.altitude = findViewById(R.id.altitude);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
-
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 }
-            }
         }
         else {
 
@@ -53,24 +50,23 @@ public class ma_location extends AppCompatActivity {
                 altitude.setText(""+loc.configure().getAltitude());
 
             } else {
-                longitude.setText("ligitude");
-                latitude.setText("latitude");
-                altitude.setText("altitude");
+               /// longitude.setText("longitude");
+                ///latitude.setText("latitude");
+               /// altitude.setText("altitude");
             }
-            numéro.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
             ///Timer permet d'envoyer chaque 3mins les coordonnées
             Timer timer=new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    data.envoyer(bus.getText().toString(),latitude.getText().toString(),longitude.getText().toString());
+                    if(bus.getText().toString().isEmpty() || latitude.getText().toString().isEmpty()||longitude.getText().toString().isEmpty()){
+
+                    }
+                    else{
+                        data.envoyer(bus.getText().toString(),latitude.getText().toString(),longitude.getText().toString());
+                    }
                 }
-            },100,3*60*1000);
+            },100,60*1000);
 
     }
 }

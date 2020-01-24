@@ -66,7 +66,6 @@ public class speaker extends AppCompatActivity {
 
                     Toast.makeText(context, "bufferreceive", Toast.LENGTH_SHORT).show();
 
-
                 }
 
                 @Override
@@ -108,7 +107,7 @@ public class speaker extends AppCompatActivity {
         }
     }
     ///methode appellé lorsque le speetchRecognizer est initialisé
-    public void initializeTextToSpeech() {
+    public void initializeTextToSpeech(final String menu) {
         myTTs=new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -117,7 +116,7 @@ public class speaker extends AppCompatActivity {
                 }
                 else{
                     myTTs.setLanguage(Locale.FRANCE);
-                    speake("Bienvenu ");
+                    speake(menu);
                 }
 
             }

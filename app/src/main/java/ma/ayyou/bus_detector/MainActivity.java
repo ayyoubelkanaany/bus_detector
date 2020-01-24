@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        parleur.initializeTextToSpeech();
+        parleur.initializeTextToSpeech("bienvenu sur le menu principale qui vous permet d'envoyer votre localisation ou de chercher un bus ");
         parleur.initializespeechRecognizer();
     }
 
