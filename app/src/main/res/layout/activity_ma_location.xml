@@ -2,59 +2,87 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:background="#99A"
-    android:gravity="center"
     android:layout_height="match_parent"
+    android:background="#2AF"
+    android:orientation="vertical"
     tools:context=".ma_location">
+
+    <Button
+        android:background="#2AC"
+        android:id="@+id/retour"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity=""
+        android:text="Retour"
+        android:textColor="#000"
+        android:textSize="15dp">
+
+    </Button>
+
     <LinearLayout
-        android:gravity="center"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_gravity="fill_vertical"
+        android:gravity="center"
+        android:orientation="vertical">
+
         <TextView
-            android:text=""
             android:id="@+id/latitude"
-            android:textSize="30dp"
-            android:background="#77F"
-            android:textAlignment="center"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="#2AC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="30dp">
 
         </TextView>
+
         <TextView
-            android:background="#44A"
-            android:textAlignment="center"
-            android:text=""
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:id="@+id/longitude"
-            android:textSize="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
-        </TextView>
-        <TextView
-            android:text=""
-            android:textSize="30dp"
-            android:background="#77F"
-            android:textAlignment="center"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:text=""
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="#2AC"
+            android:textAlignment="center"
+            android:textSize="30dp">
+
+        </TextView>
+
+        <TextView
             android:id="@+id/altitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text=""
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="#2AC"
+            android:textAlignment="center"
+            android:textSize="30dp">
 
         </TextView>
 
+        <EditText
+            android:id="@+id/bus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:hint="numéro de bus"
+            android:background="#2AC"
+            android:textAlignment="center"
+            android:textColorHint="#000"
+            android:textSize="15dp">
+
+        </EditText>
     </LinearLayout>
-    <EditText
-        android:id="@+id/bus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </EditText>
 </LinearLayout>

@@ -23,21 +23,17 @@ class location extends AppCompatActivity implements LocationListener {
     public location(Context context){
         this.context=context;
         locationManager= (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        //my_location=new ma_location();
     }
     ////implementation des méthodes de locationlistener
     @Override
     public void onLocationChanged(Location location) {
-        //Toast.makeText(context, "alt : " + location.getAltitude() + "long : " + location.getLongitude(), Toast.LENGTH_SHORT).show();
-        ////à chaque changelent de la location longitude, latitude change ils sont static
-        my_location.longitude.setText(""+ location.getLongitude());
-        my_location.latitude.setText(""+location.getLatitude());
-        my_location.altitude.setText(""+ location.getAltitude());
+        MapsActivity.latitude=location.getLatitude();
+        MapsActivity.longitude=location.getLongitude();
+
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        /// Toast.makeText(context, ""+extras.describeContents(), LENGTH_SHORT).show();
     }
 
     @Override
@@ -65,15 +61,9 @@ class location extends AppCompatActivity implements LocationListener {
                 /// Toast.makeText(context, "hello1", Toast.LENGTH_SHORT).show();
             }
         }
-        else{
-            // Toast.makeText(context, "hello2", Toast.LENGTH_SHORT).show();
-
-        }
         boolean isenable=locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if(isenable){
             ////exécuter si le gps est activer
-            /// Toast.makeText(context, "if", Toast.LENGTH_SHORT).show();
-
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,2000,1,this);
             location= locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 

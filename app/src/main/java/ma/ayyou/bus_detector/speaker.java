@@ -126,10 +126,11 @@ public class speaker extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void processresult(String command) throws InterruptedException {
         command=command.toLowerCase();
-            if(command.indexOf("quelle heure est elle")!=-1){
+            if(command.indexOf("quelle heure")!=-1){
                 Date now=new Date();
                 String time= DateUtils.formatDateTime(this,now.getTime(),DateUtils.FORMAT_SHOW_TIME);
-                speake("l'heure"+time);
+                Toast.makeText(context, "time : "+time, Toast.LENGTH_SHORT).show();
+                //speake("c'est"+time);
             }
         if(command.indexOf("oui")!=-1) {
             ///speake("je suis a votre service patienter une minute ");

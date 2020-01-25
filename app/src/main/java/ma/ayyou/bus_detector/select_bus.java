@@ -17,7 +17,7 @@ public class select_bus extends AppCompatActivity {
     ///class pour entrer le numéroo de bus et passer vers le maps
     private EditText text;
     public static int bus;
-    private Button btn0,btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,supprimer,detecte,start;
+    private Button btn0,btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,supprimer,detecte,retourner;
     speaker parleur;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -38,13 +38,14 @@ public class select_bus extends AppCompatActivity {
         this.detecte=findViewById(R.id.detecte_bus);
         this.supprimer=findViewById(R.id.supprimer);
         this.text=findViewById(R.id.editText);
+        this.retourner=findViewById(R.id.retourner);
+
         FloatingActionButton fab = findViewById(R.id.fab);
         parleur.initializeTextToSpeech("ce menu vous permet de taper le numéro de bus que vous voulez charcher");
         parleur.initializespeechRecognizer();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
             }
         });
         btn0.setOnClickListener(new View.OnClickListener() {
@@ -124,7 +125,7 @@ public class select_bus extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 text.setText(text.getText()+""+btn0.getText());
-                parleur.speake("le numéro entrer est"+text.getText());
+                parleur.speake("le numéro entrer est "+text.getText());
 
                 return true;
             }
@@ -133,7 +134,7 @@ public class select_bus extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 text.setText(text.getText()+""+btn1.getText());
-                parleur.speake("le numéro entrer est"+text.getText());
+                parleur.speake("le numéro entrer est "+text.getText());
 
                 return true;
             }
@@ -142,7 +143,7 @@ public class select_bus extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 text.setText(text.getText()+""+btn2.getText());
-                parleur.speake("le numéro entrer est"+text.getText());
+                parleur.speake("le numéro entrer est "+text.getText());
 
                 return true;
             }
@@ -151,7 +152,7 @@ public class select_bus extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 text.setText(text.getText()+""+btn3.getText());
-                parleur.speake("le numéro entrer est"+text.getText());
+                parleur.speake("le numéro entrer est "+text.getText());
 
                 return true;
             }
@@ -160,7 +161,7 @@ public class select_bus extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 text.setText(text.getText()+""+btn4.getText());
-                parleur.speake("le numéro entrer est"+text.getText());
+                parleur.speake("le numéro entrer est "+text.getText());
 
                 return true;
             }
@@ -169,7 +170,7 @@ public class select_bus extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 text.setText(text.getText()+""+btn5.getText());
-                parleur.speake("le numéro entrer est"+text.getText());
+                parleur.speake("le numéro entrer est "+text.getText());
 
                 return true;
             }
@@ -178,7 +179,7 @@ public class select_bus extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 text.setText(text.getText()+""+btn6.getText());
-                parleur.speake("le numéro entrer est"+text.getText());
+                parleur.speake("le numéro entrer est "+text.getText());
 
                 return true;
             }
@@ -187,7 +188,7 @@ public class select_bus extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 text.setText(text.getText()+""+btn7.getText());
-                parleur.speake("le numéro entrer est"+text.getText());
+                parleur.speake("le numéro entrer est "+text.getText());
 
                 return true;
             }
@@ -196,7 +197,7 @@ public class select_bus extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 text.setText(text.getText()+""+btn8.getText());
-                parleur.speake("le numéro entrer est"+text.getText());
+                parleur.speake("le numéro entrer est "+text.getText());
 
                 return true;
             }
@@ -205,7 +206,7 @@ public class select_bus extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 text.setText(text.getText()+""+btn9.getText());
-                parleur.speake("le numéro entrer est"+text.getText());
+                parleur.speake("le numéro entrer est "+text.getText());
 
                 return true;
             }
@@ -219,11 +220,20 @@ public class select_bus extends AppCompatActivity {
                 }
                 else{
                     text.setText(text.getText().subSequence(0,text.length()-1));
-                    parleur.speake("le numéro entrer est"+text.getText());
+                    parleur.speake("le numéro entrer est "+text.getText());
                 }
 
 
                 return true;
+            }
+        });
+        retourner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
+                    finish();
+
             }
         });
         detecte.setOnLongClickListener(new View.OnLongClickListener() {
@@ -238,6 +248,7 @@ public class select_bus extends AppCompatActivity {
                     parleur.speake("Patienter une minute");
                     Intent intent=new Intent(getApplication(),MapsActivity.class);
                     startActivity(intent);
+                    finish();
 
                 }
                 /*try {

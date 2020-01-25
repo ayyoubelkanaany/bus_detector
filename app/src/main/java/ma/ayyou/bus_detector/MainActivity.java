@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             int REQUEST_ENABLE_LOCATION=6;
             requestPermissions(
                     new String[] {  Manifest.permission.RECORD_AUDIO  },
-                    REQUEST_ENABLE_LOCATION );
+                    REQUEST_ENABLE_LOCATION);
         }
         fab.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)

@@ -1,5 +1,7 @@
 package ma.ayyou.bus_detector;
+
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.widget.Toast;
 
@@ -11,21 +13,24 @@ import com.pubnub.api.callbacks.PNCallback;
 import com.pubnub.api.models.consumer.PNPublishResult;
 import com.pubnub.api.models.consumer.PNStatus;
 import com.pubnub.api.models.consumer.history.PNHistoryResult;
+
 import java.util.Arrays;
 
 public class senddata {
     //classe qui envoie les coordonnées en utilisant PABNUB c'est une SDK payant lorsque le volume des données transmées devient important
     PubNub pubnub;
-    location loc;
     Context context;
+     public static MediaPlayer mediaPlayer;
+    speaker parleur;
+    public static boolean your_bus=false;
+    public static boolean play=false;
     static String[] info=new String[3];
     String name_channel;
     PNConfiguration pnConfiguration;
-@RequiresApi(api = Build.VERSION_CODES.M)
-public senddata(Context context){
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public senddata(Context context){
     ///construteur pour configurer la connexion
     this.context=context;
-    loc=new location(context);
     pnConfiguration = new PNConfiguration();
     pnConfiguration.setSubscribeKey("sub-c-51413e6a-1398-11ea-ad5f-8ede71033476");///clé pour écouter sur une chaine
     pnConfiguration.setPublishKey("pub-c-36e81a45-2037-4095-bdec-760b961f5c24");///clé pour envoyer sur une chaine
@@ -37,6 +42,7 @@ public senddata(Context context){
             .withPresence()
             .execute();
 }
+    public senddata(){}
 ///méthode pour envoyer
 public void envoyer(String bus,String longitude,String latitude){
     pubnub.publish()
@@ -62,17 +68,25 @@ public void getdata(){
                 @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void onResponse(PNHistoryResult result, PNStatus status) {
-                    Toast.makeText(context, "log : "+result.getMessages().get(0).getEntry().getAsJsonArray().get(2).getAsDouble(), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(context, "lat : "+result.getMessages().get(0).getEntry().getAsJsonArray().get(1).getAsDouble(), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(context, "bus : "+result.getMessages().get(0).getEntry().getAsJsonArray().get(0).getAsInt(), Toast.LENGTH_SHORT).show();
-         if(result.getMessages().get(0).getEntry().getAsJsonArray().get(2).getAsDouble()!=0.0 && result.getMessages().get(0).getEntry().getAsJsonArray().get(1).getAsDouble()!=0.0){
+                    //Toast.makeText(context, "log : "+result.getMessages().get(0).getEntry().getAsJsonArray().get(2).getAsDouble(), Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(context, "lat : "+result.getMessages().get(0).getEntry().getAsJsonArray().get(1).getAsDouble(), Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(context, "bus : "+result.getMessages().get(0).getEntry().getAsJsonArray().get(0).getAsInt(), Toast.LENGTH_SHORT).show();
+            if(result.getMessages().get(0).getEntry().getAsJsonArray().get(2).getAsDouble()!=0.0 && result.getMessages().get(0).getEntry().getAsJsonArray().get(1).getAsDouble()!=0.0){
             MapsActivity.log=result.getMessages().get(0).getEntry().getAsJsonArray().get(2).getAsDouble();
             MapsActivity.lat=result.getMessages().get(0).getEntry().getAsJsonArray().get(1).getAsDouble();
             int num_bus = result.getMessages().get(0).getEntry().getAsJsonArray().get(0).getAsInt();
             if(num_bus==select_bus.bus){
-                Toast.makeText(context, "lat : "+loc.configure().getLatitude(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(context, "log : "+loc.configure().getLongitude(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(context, "le meme bus", Toast.LENGTH_SHORT).show();
+                your_bus=true;
+                double lat_diff=MapsActivity.latitude-MapsActivity.lat;
+                double long_diff=MapsActivity.longitude-MapsActivity.log;
+                //Toast.makeText(context, "votre lat - bus lat  : "+lat_diff, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "votre log - bus log : "+long_diff, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "le meme bus", Toast.LENGTH_SHORT).show();
+                if(MapsActivity.latitude-MapsActivity.lat<20 || MapsActivity.longitude-MapsActivity.log<5){
+                    //play=true;
+                     mediaPlayer = MediaPlayer.create(context,R.raw.ringtone);
+                    // mediaPlayer.start(); // no need to call prepare(); create() does that for you
+                }
             }
         }
 
