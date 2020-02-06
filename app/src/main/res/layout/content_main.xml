@@ -9,11 +9,12 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
+
     <Button
         android:layout_width="250dp"
         android:layout_height="70dp"
         android:textColor="#000"
-        android:background="#2AC"
+        android:background="@drawable/border"
         android:text="Chercher un bus"
         android:layout_marginBottom="20dp"
         android:id="@+id/detect">
@@ -23,7 +24,7 @@
         android:layout_width="250dp"
         android:layout_height="70dp"
         android:textColor="#000"
-        android:background="#2AC"
+        android:background="@drawable/border"
         android:text="Envoyer la localisation"
         android:layout_marginTop="20dp"
         android:id="@+id/send">

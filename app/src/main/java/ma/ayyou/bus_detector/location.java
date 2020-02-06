@@ -10,10 +10,8 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 class location extends AppCompatActivity implements LocationListener {
     ////cette classe récupère la localisation de mon téléphone et envoie les coordonnées
     public Location location;
@@ -35,7 +33,6 @@ class location extends AppCompatActivity implements LocationListener {
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
-
     @Override
     public void onProviderEnabled(String provider) {
 
@@ -66,7 +63,6 @@ class location extends AppCompatActivity implements LocationListener {
             ////exécuter si le gps est activer
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,2000,1,this);
             location= locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
             // Toast.makeText(context, "location : "+location.getLongitude(), Toast.LENGTH_SHORT).show();
             return location;
         }

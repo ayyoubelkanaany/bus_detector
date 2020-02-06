@@ -9,10 +9,8 @@ import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.text.format.DateUtils;
 import android.widget.Toast;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -21,19 +19,17 @@ public class speaker extends AppCompatActivity {
     private TextToSpeech myTTs;
     private Context context;
     public SpeechRecognizer speechRecognizer;
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     public speaker(Context context) {
         this.context=context;
         }
-///méthode speak
+    ///méthode speak
     public void speake(String message) {
         if(Build.VERSION.SDK_INT>21){
             myTTs.speak(message, TextToSpeech.QUEUE_FLUSH,null,null);
         }
         else{
             myTTs.speak(message,TextToSpeech.QUEUE_FLUSH,null);
-
         }
     }
     ///methode pour initialiser le recognizer qui gère la voix
@@ -43,14 +39,13 @@ public class speaker extends AppCompatActivity {
             speechRecognizer.setRecognitionListener(new RecognitionListener() {
                 @Override
                 public void onReadyForSpeech(Bundle params) {
-                    Toast.makeText(context, "ready", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(context, "ready", Toast.LENGTH_SHORT).show();
 
                 }
 
                 @Override
                 public void onBeginningOfSpeech() {
-                    Toast.makeText(context, "begenning", Toast.LENGTH_SHORT).show();
-
+                   // Toast.makeText(context, "begenning", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -64,7 +59,7 @@ public class speaker extends AppCompatActivity {
                 @Override
                 public void onBufferReceived(byte[] buffer) {
 
-                    Toast.makeText(context, "bufferreceive", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "bufferreceive", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -76,7 +71,7 @@ public class speaker extends AppCompatActivity {
 
                 @Override
                 public void onError(int error) {
-                    Toast.makeText(context, "error", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(context, "error", Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -94,14 +89,14 @@ public class speaker extends AppCompatActivity {
                 }
                 @Override
                 public void onPartialResults(Bundle partialResults) {
-                    Toast.makeText(context  , "partial", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(context  , "partial", Toast.LENGTH_SHORT).show();
 
 
                 }
 
                 @Override
                 public void onEvent(int eventType, Bundle params) {
-                    Toast.makeText(context, "event", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(context, "event", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -115,7 +110,7 @@ public class speaker extends AppCompatActivity {
                     Toast.makeText(context, "no tts", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    myTTs.setLanguage(Locale.FRANCE);
+                    myTTs.setLanguage(Locale.FRENCH);
                     speake(menu);
                 }
 
@@ -126,7 +121,7 @@ public class speaker extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void processresult(String command) throws InterruptedException {
         command=command.toLowerCase();
-            if(command.indexOf("quelle heure")!=-1){
+            if(command.indexOf("heure")!=-1){
                 Date now=new Date();
                 String time= DateUtils.formatDateTime(this,now.getTime(),DateUtils.FORMAT_SHOW_TIME);
                 Toast.makeText(context, "time : "+time, Toast.LENGTH_SHORT).show();
@@ -138,12 +133,16 @@ public class speaker extends AppCompatActivity {
             //Toast.makeText(context, "avant start", Toast.LENGTH_SHORT).show();
             //startActivityForResult(intent,2);
            // Toast.makeText(context, "apès start", Toast.LENGTH_SHORT).show();
-
         }
-        if(command.indexOf("yes")!=-1) {
-            speake("I am at your service wait for a minute");}
-        if(command.indexOf("bus")!=-1) {
-            speake(" quel bus?");
+        if(command.indexOf("bonjour")!=-1) {
+            speake("que puis-je faire pour vous");
+            Thread.sleep(5000);
+            Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,1);
+            speechRecognizer.startListening(intent);}
+        if(command.indexOf("appel")!=-1) {
+            speake("pour quel contact?");
             Thread.sleep(3000);
             Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -152,11 +151,9 @@ public class speaker extends AppCompatActivity {
         }
         if(command.indexOf("un")!=-1) {
             speake("d'accord");
-            Thread.sleep(5000);
-            Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,1);
-            speechRecognizer.startListening(intent);
+            MainActivity mainActivity=new MainActivity();
+           // mainActivity.call();
+
         }
 
         if(command.indexOf("merci")!=-1) {

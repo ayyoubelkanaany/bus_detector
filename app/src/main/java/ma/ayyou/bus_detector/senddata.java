@@ -3,7 +3,6 @@ package ma.ayyou.bus_detector;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -15,19 +14,21 @@ import com.pubnub.api.models.consumer.PNStatus;
 import com.pubnub.api.models.consumer.history.PNHistoryResult;
 
 import java.util.Arrays;
-
 public class senddata {
-    //classe qui envoie les coordonnées en utilisant PABNUB c'est une SDK payant lorsque le volume des données transmées devient important
+    //classe qui envoie les coordonnées en utilisant SDK PABNUB
     PubNub pubnub;
+    public static int nbr_bus=0;
     Context context;
-     public static MediaPlayer mediaPlayer;
+    public static MediaPlayer mediaPlayer;
     speaker parleur;
-    public static boolean your_bus=false;
+    public  boolean[] your_bus;
     public static boolean play=false;
     static String[] info=new String[3];
     String name_channel;
+    private int j;
     PNConfiguration pnConfiguration;
     @RequiresApi(api = Build.VERSION_CODES.M)
+
     public senddata(Context context){
     ///construteur pour configurer la connexion
     this.context=context;
@@ -36,13 +37,13 @@ public class senddata {
     pnConfiguration.setPublishKey("pub-c-36e81a45-2037-4095-bdec-760b961f5c24");///clé pour envoyer sur une chaine
     name_channel="bus";///nom de la chaine
     pnConfiguration.setSecure(false);
+    your_bus = new boolean[100];
     pubnub = new PubNub(pnConfiguration);
     pubnub.subscribe()////commencer a écouter
             .channels(Arrays.asList(name_channel)) // subscribe to channels
             .withPresence()
             .execute();
 }
-    public senddata(){}
 ///méthode pour envoyer
 public void envoyer(String bus,String longitude,String latitude){
     pubnub.publish()
@@ -52,44 +53,41 @@ public void envoyer(String bus,String longitude,String latitude){
                 ///callback aprèe l'envoie pour
                 @Override
                 public void onResponse(PNPublishResult result, PNStatus status) {
-                    // handle publish result, status always present, result if successful
-                    // status.isError to see if error happened
-                    Toast.makeText(context,"time : "+result.getTimetoken(),Toast.LENGTH_SHORT).show();
-                    ///getdata();
+
                 }
             });
 }
 ///méthode pour récupérer les données
+@RequiresApi(api = Build.VERSION_CODES.M)
 public void getdata(){
+    j=0;
     pubnub.history()
             .channel(name_channel) // where to fetch history from
-            .count(1) // how many items to fetch 1 le dernier message
+            .count(30) // how many items to fetch 1 le dernier message
             .async(new PNCallback<PNHistoryResult>() {
                 @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void onResponse(PNHistoryResult result, PNStatus status) {
-                    //Toast.makeText(context, "log : "+result.getMessages().get(0).getEntry().getAsJsonArray().get(2).getAsDouble(), Toast.LENGTH_SHORT).show();
-                   // Toast.makeText(context, "lat : "+result.getMessages().get(0).getEntry().getAsJsonArray().get(1).getAsDouble(), Toast.LENGTH_SHORT).show();
-                   // Toast.makeText(context, "bus : "+result.getMessages().get(0).getEntry().getAsJsonArray().get(0).getAsInt(), Toast.LENGTH_SHORT).show();
-            if(result.getMessages().get(0).getEntry().getAsJsonArray().get(2).getAsDouble()!=0.0 && result.getMessages().get(0).getEntry().getAsJsonArray().get(1).getAsDouble()!=0.0){
-            MapsActivity.log=result.getMessages().get(0).getEntry().getAsJsonArray().get(2).getAsDouble();
-            MapsActivity.lat=result.getMessages().get(0).getEntry().getAsJsonArray().get(1).getAsDouble();
-            int num_bus = result.getMessages().get(0).getEntry().getAsJsonArray().get(0).getAsInt();
-            if(num_bus==select_bus.bus){
-                your_bus=true;
-                double lat_diff=MapsActivity.latitude-MapsActivity.lat;
-                double long_diff=MapsActivity.longitude-MapsActivity.log;
-                //Toast.makeText(context, "votre lat - bus lat  : "+lat_diff, Toast.LENGTH_SHORT).show();
-                //Toast.makeText(context, "votre log - bus log : "+long_diff, Toast.LENGTH_SHORT).show();
-                //Toast.makeText(context, "le meme bus", Toast.LENGTH_SHORT).show();
-                if(MapsActivity.latitude-MapsActivity.lat<20 || MapsActivity.longitude-MapsActivity.log<5){
-                    //play=true;
-                     mediaPlayer = MediaPlayer.create(context,R.raw.ringtone);
-                    // mediaPlayer.start(); // no need to call prepare(); create() does that for you
-                }
-            }
-        }
+                    if(result.getMessages().size()>=30) {
+                        for (int i = 29; i >= 0; i--) {
+                            /// Toast.makeText(context, "bus : "+result.getMessages().get(i).getEntry().getAsJsonArray().get(0).getAsInt(), Toast.LENGTH_SHORT).show();
+                            if (result.getMessages().get(i).getEntry().getAsJsonArray().get(2).getAsDouble() != 0.0 && result.getMessages().get(i).getEntry().getAsJsonArray().get(1).getAsDouble() != 0.0) {
+                                int num_bus = result.getMessages().get(i).getEntry().getAsJsonArray().get(0).getAsInt();
+                                //Toast.makeText(context, "le meme bus "+num_bus, Toast.LENGTH_SHORT).show();
+                                if (num_bus == select_bus.bus) {
+                                    your_bus[j] = true;
+                                    nbr_bus++;
+                                    j++;
+                                    MapsActivity.log[29 - i] = result.getMessages().get(i).getEntry().getAsJsonArray().get(2).getAsDouble();
+                                    MapsActivity.lat[29 - i] = result.getMessages().get(i).getEntry().getAsJsonArray().get(1).getAsDouble();
+                                }
 
+                            }
+                        }
+                    }
+                    else{
+                        parleur.speake("aucun bus n'est actif por le moment");
+                    }
                 }
             });
 

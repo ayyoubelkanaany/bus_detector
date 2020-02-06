@@ -3,25 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#2AF"
+    android:background="@drawable/gradient"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     tools:context=".select_bus">
     <include layout="@layout/content_select_bus" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_btn_speak_now" />
     <Button
-        android:background="#2AC"
-        android:layout_gravity="bottom|start"
+        android:background="@drawable/border2"
+        android:layout_gravity="bottom|center"
         android:id="@+id/retourner"
         android:text="Retour"
-        android:layout_margin="20dp"
+        android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </Button>

@@ -6,12 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class select_bus extends AppCompatActivity {
     ///class pour entrer le numéroo de bus et passer vers le maps
@@ -39,15 +36,8 @@ public class select_bus extends AppCompatActivity {
         this.supprimer=findViewById(R.id.supprimer);
         this.text=findViewById(R.id.editText);
         this.retourner=findViewById(R.id.retourner);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        parleur.initializeTextToSpeech("ce menu vous permet de taper le numéro de bus que vous voulez charcher");
+        parleur.initializeTextToSpeech("taper le numéro de bus que vous voulez charcher");
         parleur.initializespeechRecognizer();
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
         btn0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +108,12 @@ public class select_bus extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 parleur.speake("commencer la recherche");
+            }
+        });
+        retourner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                parleur.speake("Retourner");
             }
         });
 
@@ -198,7 +194,6 @@ public class select_bus extends AppCompatActivity {
             public boolean onLongClick(View v) {
                 text.setText(text.getText()+""+btn8.getText());
                 parleur.speake("le numéro entrer est "+text.getText());
-
                 return true;
             }
         });
@@ -227,13 +222,14 @@ public class select_bus extends AppCompatActivity {
                 return true;
             }
         });
-        retourner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    Intent intent=new Intent(getApplicationContext(),MainActivity.class);
-                    startActivity(intent);
-                    finish();
 
+        retourner.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                finish();
+                return false;
             }
         });
         detecte.setOnLongClickListener(new View.OnLongClickListener() {
@@ -244,22 +240,11 @@ public class select_bus extends AppCompatActivity {
                 }
                 else{
                     bus=Integer.parseInt(text.getText().toString());
-                    Toast.makeText(getApplicationContext(), ""+bus, Toast.LENGTH_SHORT).show();
-                    parleur.speake("Patienter une minute");
+                    parleur.speake("Patientez une minute");
                     Intent intent=new Intent(getApplication(),MapsActivity.class);
                     startActivity(intent);
                     finish();
-
                 }
-                /*try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,1);
-                parleur.speechRecognizer.startListening(intent);*/
                 return true;
             }
         });

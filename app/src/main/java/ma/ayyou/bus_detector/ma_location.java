@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -14,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -28,20 +28,23 @@ public class ma_location extends AppCompatActivity implements LocationListener {
     public static EditText bus;
     private Button retour;
     public Timer timer;
+    public static MediaPlayer mediaPlayer;
     speaker parleur;
+    private boolean first=false;
     public Location location;
     LocationManager locationManager;
     location loc;////objets location
     senddata data; /// objets senddata poue envoyer les coordonnées
     private Button numéro;
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ma_location);
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.sonnerie);
         parleur = new speaker(this);
         parleur.initializespeechRecognizer();
+        parleur.initializeTextToSpeech("entrer le numéro de bus à diffuser");
         loc = new location(this);
         data = new senddata(this);
         this.longitude = findViewById(R.id.longitude);
@@ -65,6 +68,16 @@ public class ma_location extends AppCompatActivity implements LocationListener {
 
             }
         });
+        retour.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                finish();
+                timer.cancel();
+                return false;
+            }
+        });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED | checkSelfPermission(Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_DENIED) {
@@ -74,12 +87,9 @@ public class ma_location extends AppCompatActivity implements LocationListener {
                 /// Toast.makeText(context, "hello1", Toast.LENGTH_SHORT).show();
             }
         }
-
         boolean isenable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (isenable) {
             ////exécuter si le gps est activer
-            /// Toast.makeText(context, "if", Toast.LENGTH_SHORT).show();
-
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (location != null) {
@@ -87,38 +97,36 @@ public class ma_location extends AppCompatActivity implements LocationListener {
                 longitude.setText("" + location.getLongitude());
                 latitude.setText("" + location.getLatitude());
                 altitude.setText("" + location.getAltitude());
-                parleur.initializeTextToSpeech("selectionner le numéro de bus à diffuser");
-
-
             } else {
 
             }
         } else {
             int REQUEST_ENABLE_LOCATION = 6;
             requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_ENABLE_LOCATION);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_ENABLE_LOCATION);
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivityForResult(intent, 3);
         }
-
-
         ///Timer permet d'envoyer chaque 10 secondes les coordonnées
          timer = new Timer();
-        timer.schedule(new TimerTask() {
+        timer.schedule(new TimerTask(){
             @Override
             public void run() {
 
                 if (bus.getText().toString().isEmpty() || latitude.getText().toString().isEmpty() || longitude.getText().toString().isEmpty()) {
 
                 } else {
-                    data.envoyer(bus.getText().toString(), latitude.getText().toString(), longitude.getText().toString());
+                    if(first==false){
+                        parleur.speake("la diffusion a commencée");
+                        first=true;
+                    }
+                    data.envoyer(bus.getText().toString(), latitude.getText().toString(),longitude.getText().toString());
+                    mediaPlayer.start();
+
                 }
             }
-        }, 0,  60*1000);
-
+        }, 6000,  30000);
     }
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -128,11 +136,6 @@ public class ma_location extends AppCompatActivity implements LocationListener {
                 if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    Activity#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for Activity#requestPermissions for more details.
                     return;
                 }
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, this);
@@ -142,18 +145,20 @@ public class ma_location extends AppCompatActivity implements LocationListener {
                     longitude.setText(""+location.getLongitude());
                     latitude.setText(""+location.getLatitude());
                     altitude.setText(""+location.getAltitude());
-
                 }
-
             }
             else{
-                Toast.makeText(getApplicationContext(), "le gps doit etre activer", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "le gps doit etre activer", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(intent );
             }
         }
+        if(requestCode == 2){
+            if(requestCode==RESULT_CANCELED){
+                parleur.speake("le gps est ouvert");
+            }
+        }
     }
-
     @Override
     public void onLocationChanged(Location location) {
         //Toast.makeText(context, "location change ", Toast.LENGTH_SHORT).show();
@@ -161,28 +166,22 @@ public class ma_location extends AppCompatActivity implements LocationListener {
         longitude.setText(""+ location.getLongitude());
         latitude.setText(""+location.getLatitude());
         altitude.setText(""+ location.getAltitude());
-        //Toast.makeText(context, "apres location change ", Toast.LENGTH_SHORT).show();
+        ///Toast.makeText(context, "apres location change ", Toast.LENGTH_SHORT).show();
     }
-
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
+    public void onStatusChanged(String provider, int status, Bundle extras){
     }
-
     @Override
     public void onProviderEnabled(String provider) {
-
     }
-
     @Override
     public void onProviderDisabled(String provider) {
+        parleur.speake("ouvrez le gps");
         Intent intent=new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        startActivityForResult(intent,3);
+        startActivityForResult(intent,2);
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
     }
 }
