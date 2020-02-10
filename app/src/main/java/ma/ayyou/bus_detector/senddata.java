@@ -68,7 +68,6 @@ public void getdata(){
                 @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void onResponse(PNHistoryResult result, PNStatus status) {
-                    if(result.getMessages().size()>=30) {
                         for (int i = 29; i >= 0; i--) {
                             /// Toast.makeText(context, "bus : "+result.getMessages().get(i).getEntry().getAsJsonArray().get(0).getAsInt(), Toast.LENGTH_SHORT).show();
                             if (result.getMessages().get(i).getEntry().getAsJsonArray().get(2).getAsDouble() != 0.0 && result.getMessages().get(i).getEntry().getAsJsonArray().get(1).getAsDouble() != 0.0) {
@@ -81,13 +80,8 @@ public void getdata(){
                                     MapsActivity.log[29 - i] = result.getMessages().get(i).getEntry().getAsJsonArray().get(2).getAsDouble();
                                     MapsActivity.lat[29 - i] = result.getMessages().get(i).getEntry().getAsJsonArray().get(1).getAsDouble();
                                 }
-
                             }
                         }
-                    }
-                    else{
-                        parleur.speake("aucun bus n'est actif por le moment");
-                    }
                 }
             });
 

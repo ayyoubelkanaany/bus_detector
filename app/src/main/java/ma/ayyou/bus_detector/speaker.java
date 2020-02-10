@@ -91,7 +91,6 @@ public class speaker extends AppCompatActivity {
                 public void onPartialResults(Bundle partialResults) {
                    // Toast.makeText(context  , "partial", Toast.LENGTH_SHORT).show();
 
-
                 }
 
                 @Override
